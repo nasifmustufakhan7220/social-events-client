@@ -5,11 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* Light Theme */
-
-
 :root {
   --background: #f5f5f5;
-  --foreground: #171717;
+  --foreground: #f5f5f5;
 
   --card: #ffffff;
   --card-foreground: #171717;
@@ -36,15 +34,20 @@
   --radius: 0.75rem;
 
   /* Custom Brand Color */
-  --brand: #0284c7;
+  --brand: #0d9488;
+
+  /* Sun Color (taken from the sun icon)
+     Slightly deeper amber in light mode so it stays readable on light backgrounds */
+  --sun: #f59e0b;
+  --sun-foreground: #1c1917; /* text/icon color to use ON TOP of the sun color */
+  --border: #404040
 }
 
 /* Dark Theme */
 
-
 .dark {
   --background: #202020;
-  --foreground: #f5f5f5;
+  --foreground: #202020;
 
   --card: #292929;
   --card-foreground: #f5f5f5;
@@ -69,7 +72,13 @@
   --ring: #38bdf8;
 
   /* Custom Brand Color */
-  --brand: #38bdf8;
+  --brand: #2dd4bf;
+
+  /* Sun Color (exact color from the sun icon)
+     Bright amber works well on dark backgrounds */
+  --sun: #ffb900;
+  --sun-foreground: #0f1624; /* dark navy text/icon color to use ON TOP of the sun color */
+  --border: #404040
 }
 
 /* Tailwind CSS Theme Mapping */
@@ -100,6 +109,11 @@
   --color-ring: var(--ring);
 
   --color-brand: var(--brand);
+
+  /* Sun color mapping: enables classes like bg-sun, text-sun, border-sun */
+  --color-sun: var(--sun);
+  --color-sun-foreground: var(--sun-foreground);
+  --color-border: var(--border)
 
   --radius-lg: var(--radius);
 }
