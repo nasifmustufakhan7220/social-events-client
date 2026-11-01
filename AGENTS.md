@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Project: social-events-client
 
-Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce another package manager). Early stage: one page (`src/app/page.tsx`) rendering `src/components/Shared/Navbar.tsx`.
+Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce another package manager). Early stage: `src/app/page.tsx` is an empty placeholder; `Navbar` is rendered globally in the root layout (`src/app/layout.tsx`), not per-page. Auth UI lives under `src/app/(auth)/` (sign-in/sign-up are **UI only — forms have no submit handling yet**, per the rule below).
 
 ## Rule for every request
 
@@ -32,6 +32,13 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 - `cacheComponents: true` and `partialPrefetching: true` are set in `next.config.ts`. With cache components, route segment configs (`export const dynamic`, `revalidate`, `fetchCache`) are **errors** — use `use cache` / `cacheLife` instead. Data fetching must be cache-friendly (see `node_modules/next/dist/docs/01-app/02-guides/migrating-to-cache-components.md`).
 - Layouts/pages use the global `LayoutProps<"/route">` / `PageProps` helpers (no import needed), e.g. `function RootLayout({ children }: LayoutProps<"/">)`.
 - The bundled docs at `node_modules/next/dist/docs/` are version-matched — prefer them over training-data knowledge.
+
+## Auth (better-auth + MongoDB)
+
+- Server config: `src/app/lib/auth.ts` — note it's under **`src/app/lib/`, not `src/lib/`**. MongoDB adapter, email+password enabled, db name hardcoded to `socialEvenets` (sic — it's a real database name, don't "fix" the typo without asking).
+- Route handler: `src/app/api/auth/[...all]/route.ts` (`toNextJsHandler(auth)`).
+- Client: `src/app/lib/auth-client.ts` exports two things: `authClient` (uses `baseURL` from env) and `signIn/signUp/useSession` from a **second** `createAuthClient()` without `baseURL`. Nothing imports it yet — when wiring auth up, pick one deliberately.
+- Requires `.env` (gitignored): `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `MONGODB_CLIENT_URL`. Fresh clones must create it — code reads env with `as string` casts, so missing vars fail at runtime, not typecheck.
 
 ## UI stack (differs from typical shadcn setups)
 

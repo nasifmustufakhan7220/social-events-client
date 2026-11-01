@@ -7,7 +7,7 @@
 /* Light Theme */
 :root {
   --background: #f5f5f5;
-  --foreground: #f5f5f5;
+  --foreground: #171717;
 
   --card: #ffffff;
   --card-foreground: #171717;
@@ -36,18 +36,25 @@
   /* Custom Brand Color */
   --brand: #0d9488;
 
-  /* Sun Color (taken from the sun icon)
-     Slightly deeper amber in light mode so it stays readable on light backgrounds */
+  /* Sun Color */
   --sun: #f59e0b;
-  --sun-foreground: #1c1917; /* text/icon color to use ON TOP of the sun color */
-  --border: #404040
+  --sun-foreground: #1c1917;
+
+  /* Glass Toast */
+  --glass: rgb(255 255 255 / 0.55);
+  --glass-foreground: #171717;
+  --glass-muted-foreground: #525252;
+  --glass-border: rgb(255 255 255 / 0.7);
+  --glass-shadow: 0 8px 32px rgb(15 23 42 / 0.15);
+  --glass-blur: 16px;
+  --glass-success: #0d9488;
+  --glass-error: #dc2626;
 }
 
 /* Dark Theme */
-
 .dark {
   --background: #202020;
-  --foreground: #202020;
+  --foreground: #f5f5f5;
 
   --card: #292929;
   --card-foreground: #f5f5f5;
@@ -67,18 +74,26 @@
   --accent: #164e63;
   --accent-foreground: #e0f2fe;
 
-  --border: #ffffff;
-  --input: #525252;
+  --border: #404040;
+  --input: #404040;
   --ring: #38bdf8;
 
   /* Custom Brand Color */
   --brand: #2dd4bf;
 
-  /* Sun Color (exact color from the sun icon)
-     Bright amber works well on dark backgrounds */
+  /* Sun Color */
   --sun: #ffb900;
-  --sun-foreground: #0f1624; /* dark navy text/icon color to use ON TOP of the sun color */
-  --border: #404040
+  --sun-foreground: #0f1624;
+
+  /* Glass Toast */
+  --glass: rgb(41 41 41 / 0.5);
+  --glass-foreground: #f5f5f5;
+  --glass-muted-foreground: #d4d4d4;
+  --glass-border: rgb(255 255 255 / 0.14);
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 0.5);
+  --glass-blur: 16px;
+  --glass-success: #2dd4bf;
+  --glass-error: #f87171;
 }
 
 /* Tailwind CSS Theme Mapping */
@@ -110,10 +125,17 @@
 
   --color-brand: var(--brand);
 
-  /* Sun color mapping: enables classes like bg-sun, text-sun, border-sun */
+  /* Sun Color Mapping */
   --color-sun: var(--sun);
   --color-sun-foreground: var(--sun-foreground);
-  --color-border: var(--border)
+
+  /* Glass Toast Mapping */
+  --color-glass: var(--glass);
+  --color-glass-foreground: var(--glass-foreground);
+  --color-glass-muted-foreground: var(--glass-muted-foreground);
+  --color-glass-border: var(--glass-border);
+  --color-glass-success: var(--glass-success);
+  --color-glass-error: var(--glass-error);
 
   --radius-lg: var(--radius);
 }
@@ -126,5 +148,30 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Glass Toast */
+@layer components {
+  .glass-toast {
+    background: var(--glass);
+    color: var(--glass-foreground);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  }
+
+  .glass-toast [data-slot="toast-description"] {
+    color: var(--glass-muted-foreground);
+  }
+
+  .glass-toast[data-type="success"] [data-slot="toast-title"] {
+    color: var(--glass-success);
+  }
+
+  .glass-toast[data-type="error"] [data-slot="toast-title"] {
+    color: var(--glass-error);
   }
 }

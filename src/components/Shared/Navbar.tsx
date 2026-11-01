@@ -9,7 +9,8 @@ const Navbar = () => {
     <nav className=" bg-card">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Brand */}
-        <div className="flex items-center gap-3">
+        <Link href={'/'}>
+          <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand">
             <HelpingHand className="h-6 w-6 text-white" />
           </div>
@@ -22,11 +23,12 @@ const Navbar = () => {
             </span>
           </div>
         </div>
+        </Link>
 
         {/* Nav Link (hidden on small screens) */}
         <Link
-          href="#"
-          className="hidden items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground md:flex"
+          href="/up-comming"
+          className="hidden items-center gap-2 text-sm font-medium text-muted-foreground md:flex"
         >
           <CalendarDays className="h-5 w-5" />
           Upcoming Events
@@ -36,10 +38,12 @@ const Navbar = () => {
         <div className="flex items-center gap-3">
           <ThemeToggle />
 
-          <Button className="gap-2 bg-brand text-white hover:bg-brand/90">
+          <Link href={'/sign-in'}>
+            <Button className="gap-2 bg-brand text-white hover:bg-brand/90">
             <LogIn className="h-4 w-4" />
             Login
           </Button>
+          </Link>
         </div>
       </div>
     </nav>
