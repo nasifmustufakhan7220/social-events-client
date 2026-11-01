@@ -9,6 +9,8 @@ import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
+import { Marker, MarkerContent } from "@/components/ui/marker";
+import { FaGoogle } from "react-icons/fa";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -60,11 +62,17 @@ const LoginPage = () => {
       toast.add({
         title: `${error?.message}`,
         description: "Please try again later",
-        type:"error"
+        type: "error",
       });
       console.log(error);
     }
   };
+
+  const handelGoogleSignIn = async () =>{
+    await signIn.social({
+      provider: "google"
+    });
+}
   return (
     <div>
       {/* Heading */}
@@ -154,18 +162,31 @@ const LoginPage = () => {
         <Button
           type="submit"
           disabled={submit}
-          className="h-11 w-full rounded-lg bg-brand text-white hover:bg-brand/90"
+          className="h-11 w-full rounded-lg mt-5 cursor-pointer bg-brand text-white hover:bg-brand/90"
         >
-
-          {submit ? (
-            <Spinner className="size-5 text-white" />
-          ) : (
-            "Login here"
-          )}
+          {submit ? <Spinner className="size-5 text-white" /> : "Login here"}
         </Button>
 
+        <div className="flex w-full max-w-sm text-center ml-10 flex-col gap-8 py-5">
+          <Marker variant="separator">
+            <MarkerContent>Or continue with</MarkerContent>
+          </Marker>
+
+          <Button
+            type="button"
+            onClick={handelGoogleSignIn}
+            disabled={submit}
+            className="h-11 w-full rounded-lg cursor-pointer bg-brand text-white hover:bg-brand/90"
+          >
+            {submit ? <Spinner className="size-5 text-white" /> : <>
+            
+             <FaGoogle />
+             <p>Continue with Google</p></>}
+          </Button>
+        </div>
+
         {/* Link to the register page */}
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-center text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link
             href="/sign-up"

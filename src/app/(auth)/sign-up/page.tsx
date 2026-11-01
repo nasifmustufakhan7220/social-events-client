@@ -10,18 +10,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+
 const RegisterPage = () => {
   const router = useRouter();
   const [submit, setSubmit] = useState(false);
   const [validate, setValidate] = useState("");
   const [toggle, setToggle] = useState(false);
 
-
   const hasMinLength = validate.length >= 6;
   const hasOneUpperCase = /[A-Z]/.test(validate);
   const hasOneLowerCase = /[a-z]/.test(validate);
   const hasOneDigitCase = /[0-9]/.test(validate);
-  
+
   const handelSignUp = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -31,7 +31,12 @@ const RegisterPage = () => {
       string
     >;
 
-    if (!hasMinLength || !hasOneUpperCase || !hasOneLowerCase || !hasOneDigitCase) {
+    if (
+      !hasMinLength ||
+      !hasOneUpperCase ||
+      !hasOneLowerCase ||
+      !hasOneDigitCase
+    ) {
       return toast.add({
         title: `Fullfill the password requirements`,
         description: "Please try again",
@@ -63,7 +68,7 @@ const RegisterPage = () => {
       toast.add({
         title: `${error?.message}`,
         description: "Please try again later",
-        type: "error"
+        type: "error",
       });
       console.log(error);
     }
@@ -133,57 +138,69 @@ const RegisterPage = () => {
               name="password"
               value={validate}
               onChange={(e) => setValidate(e.target.value)}
-              type={toggle ? "text" :"password"}
+              type={toggle ? "text" : "password"}
               placeholder="password"
               className="h-11 rounded-lg px-3 pr-10"
             />
             <button
-                  type="button"
-                  onClick={() => setToggle(!toggle)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  {toggle ? (
-                    <EyeOff className="size-3.5" />
-                  ) : (
-                    <Eye className="size-3.5" />
-                  )}
-                </button>
+              type="button"
+              onClick={() => setToggle(!toggle)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              {toggle ? (
+                <EyeOff className="size-3.5" />
+              ) : (
+                <Eye className="size-3.5" />
+              )}
+            </button>
           </div>
 
-          {
-            validate.length > 0 && (
-              <div className="space-y-1 pt-1 text-[10px]">
-                  <p
-                    className={`flex items-center gap-2 ${hasMinLength ? "text-brand" : "text-slate-400"}`}
-                  >
-                    <Check size={11} />
-                    At least 6 characters
-                  </p>
-                  <p
-                    className={`flex items-center gap-2 ${hasOneUpperCase ? "text-brand" : "text-slate-400"}`}
-                  >
-                    <Check size={11} />
-                    One uppercase letter
-                  </p>
-                  <p
-                    className={`flex items-center gap-2 ${hasOneLowerCase ? "text-brand" : "text-slate-400"}`}
-                  >
-                    <Check size={11} />
-                    One lowercase letter
-                  </p>
-                  <p
-                    className={`flex items-center gap-2 ${hasOneDigitCase ? "text-brand" : "text-slate-400"}`}
-                  >
-                    <Check size={11} />
-                    One Digit
-                  </p>
-                </div>
-            )
-          }
+          {validate.length > 0 && (
+            <div className="space-y-1 pt-1 text-[10px]">
+              <p
+                className={`flex items-center gap-2 ${hasMinLength ? "text-brand" : "text-slate-400"}`}
+              >
+                <Check size={11} />
+                At least 6 characters
+              </p>
+              <p
+                className={`flex items-center gap-2 ${hasOneUpperCase ? "text-brand" : "text-slate-400"}`}
+              >
+                <Check size={11} />
+                One uppercase letter
+              </p>
+              <p
+                className={`flex items-center gap-2 ${hasOneLowerCase ? "text-brand" : "text-slate-400"}`}
+              >
+                <Check size={11} />
+                One lowercase letter
+              </p>
+              <p
+                className={`flex items-center gap-2 ${hasOneDigitCase ? "text-brand" : "text-slate-400"}`}
+              >
+                <Check size={11} />
+                One Digit
+              </p>
+            </div>
+          )}
+
+          <Button
+          type="submit"
+          disabled={submit}
+          className="h-11 w-full mt-8 rounded-lg bg-brand text-white hover:bg-brand/90"
+        >
+          {submit ? (
+            <Spinner className="size-5 text-white" />
+          ) : (
+            "Register - Start your Journey"
+          )}
+        </Button>
+
+          
         </div>
 
         {/* Terms text */}
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        <p className="text-sm leading-relaxed text-center text-muted-foreground">
           Already have an account?
           <Link
             href={"sign-in"}
@@ -194,17 +211,7 @@ const RegisterPage = () => {
         </p>
 
         {/* Submit button (UI only, no functionality) */}
-        <Button
-          type="submit"
-          disabled={submit}
-          className="h-11 w-full rounded-lg bg-brand text-white hover:bg-brand/90"
-        >
-          {submit ? (
-            <Spinner className="size-5 text-white" />
-          ) : (
-            "Register - Start your Journey"
-          )}
-        </Button>
+        
       </form>
     </div>
   );
