@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -31,7 +32,7 @@
   --input: #e5e5e5;
   --ring: #0284c7;
 
-  --radius: 0.75rem; 
+  --radius: 0.75rem;
 
   --nasif: #FF0000;
 
@@ -51,7 +52,6 @@
   --glass-blur: 16px;
   --glass-success: #0d9488;
   --glass-error: #dc2626;
-
 
   --button-transparent-bg: transparent;
   --button-transparent-fg: var(--card-foreground);
@@ -107,8 +107,9 @@
 
 /* Tailwind CSS Theme Mapping */
 @theme inline {
-    --color-button-transparent: var(--button-transparent-bg);
+  --color-button-transparent: var(--button-transparent-bg);
   --color-button-transparent-foreground: var(--button-transparent-fg);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -139,7 +140,6 @@
   /* Sun Color Mapping */
   --color-sun: var(--sun);
   --color-sun-foreground: var(--sun-foreground);
-
 
   --color-nasif: var(--nasif);
 
@@ -181,11 +181,13 @@
     color: var(--glass-muted-foreground);
   }
 
+  /* Success Toast Title */
   .glass-toast[data-type="success"] [data-slot="toast-title"] {
-    color: var(--glass-success);
+    color: var(--brand);
   }
 
+  /* Error Toast Title */
   .glass-toast[data-type="error"] [data-slot="toast-title"] {
-    color: var(--glass-error);
+    color: var(--nasif);
   }
 }

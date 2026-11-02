@@ -139,7 +139,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "success") {
     icon = (
-      <CircleCheckIcon className="text-glass-success" aria-hidden="true" />
+      <CircleCheckIcon className="text-brand" aria-hidden="true" />
     )
   }
 
@@ -157,7 +157,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "error") {
     icon = (
-      <OctagonXIcon className="text-glass-error" aria-hidden="true" />
+      <OctagonXIcon className="text-nasif" aria-hidden="true" />
     )
   }
 
@@ -180,7 +180,6 @@ function ToastIcon({ type }: { type: string | undefined }) {
     </span>
   )
 }
-
 function ToastList() {
   const { toasts } = ToastPrimitive.useToastManager()
 

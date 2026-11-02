@@ -1,5 +1,13 @@
 "use client";
-import { CalendarDays, HelpingHand, LogIn } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle,
+  HelpingHand,
+  LogIn,
+  LogOut,
+  PlusCircleIcon,
+  Settings,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import ThemeToggle from "../theme-toggle";
 import Link from "next/link";
@@ -7,6 +15,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "@/app/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "../ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const pathName = usePathname();
@@ -54,19 +71,94 @@ const Navbar = () => {
             </div>
           ) : session?.user ? (
             <div className="flex items-center gap-3">
-              <Avatar>
-                <AvatarImage
-                  referrerPolicy="no-referrer"
-                  src={session?.user?.image as string}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={
+                    <div>
+                      <Avatar>
+                        <AvatarImage
+                          referrerPolicy="no-referrer"
+                          src={session?.user?.image as string}
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </div>
+                  }
                 />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+                <DropdownMenuContent className="w-64 rounded-2xl border border-border bg-popover p-2 text-popover-foreground shadow-xl">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      My Account
+                    </DropdownMenuLabel>
+
+                    <DropdownMenuItem
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:bg-foreground/10! focus:bg-foreground/10! ${
+                        pathName === "/create-event"
+                          ? "bg-brand/10 text-brand"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      <PlusCircleIcon className="size-4" />
+                      <Link href="/create-event" className="flex-1">
+                        Create Event
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:bg-foreground/10! focus:bg-foreground/10! ${
+                        pathName === "/joined-event"
+                          ? "bg-brand/10 text-brand"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      <CheckCircle className="size-4" />
+                      <Link href="/joined-event" className="flex-1">
+                        Joined Events
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:bg-foreground/10! focus:bg-foreground/10! ${
+                        pathName === "/manage-event"
+                          ? "bg-brand/10 text-brand"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      <Settings className="size-4" />
+                      <Link href="/manage-event" className="flex-1">
+                        Manage Events
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+
+                  <DropdownMenuSeparator className="my-2" />
+
+                  <DropdownMenuItem className="group/dropdown-menu-item flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-red-600 outline-none transition-colors duration-200 hover:bg-red-500! hover:text-white! focus:bg-red-500! focus:text-white!">
+                    <LogOut className="size-4 transition-colors duration-200 group-hover/dropdown-menu-item:text-white! group-focus/dropdown-menu-item:text-white!" />
+
+                    <span
+                      className="flex-1 transition-colors duration-200 group-hover/dropdown-menu-item:text-white! group-focus/dropdown-menu-item:text-white!"
+                      onClick={() =>
+                        signOut({
+                          fetchOptions: {
+                            onSuccess: () => {
+                              router.push("/sign-in");
+                            },
+                          },
+                        })
+                      }
+                    >
+                      Log out
+                    </span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button
                 onClick={() =>
                   signOut({
                     fetchOptions: {
                       onSuccess: () => {
-                        router.push("/sign-in"); // redirect to login page
+                        router.push("/sign-in");
                       },
                     },
                   })

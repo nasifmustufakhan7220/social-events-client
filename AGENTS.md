@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Project: social-events-client
 
-Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce another package manager). Early stage: `src/app/page.tsx` is an empty placeholder; `Navbar` is rendered globally in the root layout (`src/app/layout.tsx`), not per-page. Auth UI lives under `src/app/(auth)/` (sign-in/sign-up are **UI only — forms have no submit handling yet**, per the rule below).
+Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce another package manager). Routes live in three groups under `src/app/`: `(root)` (`/`, `/up-comming`), `(auth)` (sign-in/sign-up), `(dashboard)` (`create-event`, `joined-event`, `manage-event`). `src/app/page.tsx` is still an empty placeholder; most pages are early-stage. `Navbar` and `Toaster` are rendered globally in the root layout (`src/app/layout.tsx`), not per-page. Auth is wired to better-auth (see below).
 
 ## Rule for every request
 
@@ -35,10 +35,10 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 
 ## Auth (better-auth + MongoDB)
 
-- Server config: `src/app/lib/auth.ts` — note it's under **`src/app/lib/`, not `src/lib/`**. MongoDB adapter, email+password enabled, db name hardcoded to `socialEvenets` (sic — it's a real database name, don't "fix" the typo without asking).
+- Server config: `src/app/lib/auth.ts` — note it's under **`src/app/lib/`, not `src/lib/`**. MongoDB adapter, email+password **and Google social** enabled, db name hardcoded to `socialEvenets` (sic — it's a real database name, don't "fix" the typo without asking).
 - Route handler: `src/app/api/auth/[...all]/route.ts` (`toNextJsHandler(auth)`).
-- Client: `src/app/lib/auth-client.ts` exports two things: `authClient` (uses `baseURL` from env) and `signIn/signUp/useSession` from a **second** `createAuthClient()` without `baseURL`. Nothing imports it yet — when wiring auth up, pick one deliberately.
-- Requires `.env` (gitignored): `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `MONGODB_CLIENT_URL`. Fresh clones must create it — code reads env with `as string` casts, so missing vars fail at runtime, not typecheck.
+- Client: `src/app/lib/auth-client.ts` exports two things: `authClient` (with `baseURL: process.env.BETTER_AUTH_URL`) and `signIn/signUp/signOut/useSession` from a **second** `createAuthClient()` without `baseURL`. All consumers (sign-in, sign-up, `Navbar`) import from the second one; `authClient` is unused. Don't "consolidate" them — `BETTER_AUTH_URL` has no `NEXT_PUBLIC_` prefix, so it's `undefined` in browser bundles; the bare client falls back to same-origin.
+- Requires `.env` (gitignored): `MONGODB_CLIENT_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, plus `BETTER_AUTH_GOOGLE_CLIENT_ID` / `BETTER_AUTH_GOOGLE_CLIENT_SECRET`. Fresh clones must create it — code reads env with `as string` casts, so missing vars fail at runtime, not typecheck.
 
 ## UI stack (differs from typical shadcn setups)
 
@@ -47,7 +47,7 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 - Add registry components with `npx shadcn add <component>` (`components.json` has the aliases configured); don't hand-copy components from the web.
 - `src/lib/utils.ts` only re-exports `cn` from the `cn` package — ui components import `{ cn } from "cn"` directly. There is no `twMerge`/`clsx` helper.
 - Theming: `next-themes` `ThemeProvider` in `src/app/layout.tsx`, fixed `defaultTheme="light"`, `enableSystem={false}`, `attribute="class"` (html has `suppressHydrationWarning`). `ThemeToggle` in `src/components/theme-toggle.tsx`.
-- Brand color is the custom `--brand` token in `globals.css` (mapped to Tailwind as `bg-brand` / `text-brand`, teal in light, lighter teal in dark). Use it for brand-colored UI instead of hardcoding hex values.
+- Brand color is the custom `--brand` token in `globals.css` (`#38bdf8` sky blue in both light and dark; mapped to Tailwind as `bg-brand` / `text-brand`). Use it instead of hardcoding hex values. Other custom tokens live in the same file (`--sun`, `--nasif`, glass-toast colors), wired up in the `@theme inline` block — add new tokens there.
 
 ## Conventions
 
