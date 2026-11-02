@@ -15,7 +15,7 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 ## Rule for every request
 
 - Clone the UI design only — no new features, no behavior changes, no refactors of existing functionality, no add new any functionality unless the user explicitly asks.
-- Always make UI responsive for desktop, tablet, and mobile (Tailwind responsive prefixes: `sm`, `md`, `lg`).
+- Always make UI responsive for desktop, tablet, and mobile (Tailwind responsive prefixes: `sm`, `md`, `lg`) also all color should be from global.css variables for light and dark theme.
 - Wrap component/section content in a max-width container centered with `mx-auto` (e.g. `max-w-7xl mx-auto px-4`) so elements stay in the middle of the application.
 - Write beginner-friendly code: plain, obvious patterns over clever or advanced ones (no exotic hooks, generics, or abstraction layers).
 - Follow the user's command request exactly.

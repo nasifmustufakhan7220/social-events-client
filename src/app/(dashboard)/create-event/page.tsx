@@ -64,6 +64,8 @@ const CreateEventPage = () => {
       body: JSON.stringify({
         ...createEventData,
         userEmail: userEmail,
+        userName: session?.user?.name,
+        userImage: session?.user?.image
       }),
     });
 
