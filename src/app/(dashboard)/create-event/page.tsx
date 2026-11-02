@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "@/app/lib/auth-client";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
+import { Spinner } from "@/components/ui/spinner";
 
 const quickPresets = [
   "Winter Clothes",
@@ -37,6 +38,7 @@ const getTodayLoacl = () => {
 const CreateEventPage = () => {
   const { data: session } = useSession();
   const [d, setD] = useState("");
+  const [submit, setSubmit] = useState(false);
 
   const userEmail = session?.user?.email;
 
@@ -50,10 +52,10 @@ const CreateEventPage = () => {
     if (d < today) {
       return toast.add({
         title: "Date must be today or later",
-        type: "error"
+        type: "error",
       });
     }
-
+    setSubmit(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}create-event`, {
       method: "POST",
       headers: {
@@ -66,12 +68,13 @@ const CreateEventPage = () => {
     });
 
     const data = await res.json();
-    if(data.acknowledged){
+    if (data.acknowledged) {
       toast.add({
         title: "Event created successfully",
-        type: 'success'
-      })
-    };
+        type: "success",
+      });
+    }
+    setSubmit(false);
   };
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
@@ -262,10 +265,17 @@ const CreateEventPage = () => {
 
           <button
             type="submit"
+            disabled={submit}
             className="flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-brand text-sm font-bold text-white transition-colors hover:bg-brand/90"
           >
-            <CirclePlus className="h-5 w-5" />
-            Publish Event
+            {submit ? (
+              <Spinner className="size-5 text-white" />
+            ) : (
+              <>
+                <CirclePlus className="h-5 w-5" />
+                Publish Event
+              </>
+            )}
           </button>
         </form>
       </section>
