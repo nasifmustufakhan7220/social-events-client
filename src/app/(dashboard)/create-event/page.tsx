@@ -25,7 +25,7 @@ const quickPresets = [
   "Tree Plantation",
 ];
 
-const eventTypes = ["Donation", "Voluntary", "Awareness", "Fundraising"];
+const eventTypes = ["Donation", "Cleanup", "Plantation", "Winter Relief", "Food Drive", "Health Camp", "Education"];
 
 const getTodayLoacl = () => {
   const now = new Date();
@@ -39,6 +39,7 @@ const CreateEventPage = () => {
   const { data: session } = useSession();
   const [d, setD] = useState("");
   const [submit, setSubmit] = useState(false);
+  const [i, setI] = useState("")
 
   const userEmail = session?.user?.email;
 
@@ -55,6 +56,15 @@ const CreateEventPage = () => {
         type: "error",
       });
     }
+
+    if(!i.toLowerCase().startsWith('https://')){
+       return toast.add({
+        title: "Provide valid image URL start with https://",
+        type: "error"
+      });
+     
+    }
+    
     setSubmit(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}create-event`, {
       method: "POST",
@@ -213,6 +223,8 @@ const CreateEventPage = () => {
               <Input
                 id="event-thumbnail"
                 name="image"
+                value={i}
+                onChange={(e)=>setI(e.target.value)}
                 placeholder="https://images.unsplash.com/photo-…"
                 className="h-10 rounded-lg bg-background pl-9"
               />

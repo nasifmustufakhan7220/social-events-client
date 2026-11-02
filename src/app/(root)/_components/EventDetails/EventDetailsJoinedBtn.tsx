@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "@/app/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
 import { EventContextApi, IJoinedButton } from "@/contextApi/EventContextApi";
 import { IEventType } from "@/Type/EventsType";
@@ -7,6 +8,7 @@ import { Handshake } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
+  const {data: session} = useSession();
   const { joined, setJoined} = useContext(EventContextApi);
   const [loading, setLoading] = useState(false);
 
@@ -15,9 +17,9 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
 
 
   const user = {
-    email: data.userEmail,
-    image: data.userImage,
-    name: data.userName,
+    email: session?.user?.email as string,
+    image: session?.user?.image as string,
+    name: session?.user?.name as string,
   };
 
   const handelJoined = (user: IJoinedButton) => {
