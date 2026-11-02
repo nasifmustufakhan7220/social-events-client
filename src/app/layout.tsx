@@ -1,9 +1,11 @@
+export const instant = false;
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "@/components/Shared/Navbar";
+import Navbar from "@/app/(root)/_components/Shared/Navbar";
 import { Toaster } from "@/components/ui/toast";
+import EventContextApiProvider from "@/contextApi/EventContextApi";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,14 +30,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider  attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange>
-            <Navbar/>
-          {children}
-           <Toaster />
-        </ThemeProvider>
+        <EventContextApiProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            <Navbar />
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </EventContextApiProvider>
       </body>
     </html>
   );

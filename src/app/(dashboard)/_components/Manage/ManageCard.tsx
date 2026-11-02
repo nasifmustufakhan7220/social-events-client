@@ -8,6 +8,7 @@ import {
   User,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const ManageCard = ({ event } : {event: IEventType}) => {
 
@@ -63,12 +64,15 @@ const ManageCard = ({ event } : {event: IEventType}) => {
 
         {/* Actions */}
         <div className="mt-auto flex gap-2 pt-4">
-          <button
+            <button
             type="button"
             className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-lg bg-secondary text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/70"
           >
+          <Link href={`/up-comming/${event._id}`}>
             View
+          </Link>
           </button>
+          
           <button
             type="button"
             className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 text-sm font-bold text-primary transition-colors hover:bg-primary/20"

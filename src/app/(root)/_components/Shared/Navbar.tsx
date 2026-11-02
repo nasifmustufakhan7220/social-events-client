@@ -8,13 +8,13 @@ import {
   PlusCircleIcon,
   Settings,
 } from "lucide-react";
-import { Button } from "../ui/button";
-import ThemeToggle from "../theme-toggle";
+import { Button } from "../../../../components/ui/button";
+import ThemeToggle from "../../../../components/theme-toggle";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "@/app/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../../../components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
