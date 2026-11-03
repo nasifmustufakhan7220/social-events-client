@@ -3,13 +3,13 @@ import { IEventType } from "@/Type/EventsType";
 import {
   CalendarDays,
   MapPin,
-  SquarePen,
   Tag,
   Trash,
   User,
 } from "lucide-react";
 import Link from "next/link";
 import DefaultImageManage from "./DefaultImageManage";
+import EditMange from "./EditMange";
 
 const ManageCard = ({ event } : {event: IEventType}) => {
 
@@ -65,13 +65,8 @@ const ManageCard = ({ event } : {event: IEventType}) => {
           </Link>
           </button>
           
-          <button
-            type="button"
-            className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 text-sm font-bold text-primary transition-colors hover:bg-primary/20"
-          >
-            <SquarePen className="h-4 w-4" />
-            Edit
-          </button>
+          <EditMange event={event} />
+         
           <button
             type="button"
             className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-glass-error/40 bg-glass-error/10 px-3 text-sm font-bold text-glass-error transition-colors hover:bg-glass-error/20"
