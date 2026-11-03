@@ -3,6 +3,7 @@ import { CalendarDays, CirclePlus } from "lucide-react";
 import { Suspense } from "react";
 import UpCommingGrid from "../_components/upcomming/UpCommingGrid";
 import Link from "next/link";
+import UpcommingSkeleton from "../_components/upcomming/UpcommingSkeleton";
 
 
 
@@ -39,7 +40,7 @@ const UpComingEventspage = () => {
 
           {/* Filters and Search */}
           
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense fallback={<UpcommingSkeleton/>}>
             <UpCommingGrid />
           </Suspense>
         </div>

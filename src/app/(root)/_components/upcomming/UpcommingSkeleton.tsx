@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const skeletonCards = [1, 2, 3];
+const skeletonCards = [1, 2, 3, 4, 5, 6];
 const skeletonChips = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const UpcommingSkeleton = () => {
