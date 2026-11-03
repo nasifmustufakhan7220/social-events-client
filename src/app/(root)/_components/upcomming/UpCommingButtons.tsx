@@ -47,14 +47,15 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
 
   const e = filteredDatas();
 
-  const newE:IEventType[] = e.filter(e=> {
-    if(name.trim().length < 0){
-        return newE;
+  const newE = e.filter(ev=>{
+    if(E.trim().length === 0){
+      return e;
     }
 
-    const Efiltered = e.eventName.toLocaleLowerCase().includes(E.toLocaleLowerCase());
-    return Efiltered;
+    const filteredEvents = ev.eventName.trim().toLowerCase().includes(E.trim().toLowerCase());
+    return filteredEvents;
   })
+  
 
   return (
     <div>
@@ -90,7 +91,7 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
       </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {
-         newE.map((event) => (
+         newE.length === 0 ? "helloooooooooooo" : newE.map((event) => (
           <article
             key={event._id}
             className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg transition-colors"
