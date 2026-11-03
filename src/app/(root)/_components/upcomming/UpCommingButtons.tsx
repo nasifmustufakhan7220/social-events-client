@@ -5,7 +5,7 @@ import { IEventType } from "@/Type/EventsType";
 import { CalendarDays, MapPin, Search, Tag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const categories = [
   { name: "All", href: "#all" },
@@ -23,7 +23,7 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
   const [E, setE] = useState("");
 
   const filteredDatas = () => {
-    const ev = [...events].sort((a,b)=> new Date(a.date) - new Date(b.date));
+    const ev = [...events].sort((a,b)=> new Date(a.date).getTime() - new Date(b.date).getTime());
 
     if (name === "Donation") {
       return ev.filter((t) => t.eventType === name);
