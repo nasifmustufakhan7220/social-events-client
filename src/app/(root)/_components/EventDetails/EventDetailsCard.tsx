@@ -15,6 +15,7 @@ import { IEventType } from "@/Type/EventsType";
 import EventDetailsJoinedBtn from "./EventDetailsJoinedBtn";
 import EventDetailsVoluntearCount from "./EventDetailsVoluntearCount";
 import EventDetailsVoluntear from "./EventDetailsVoluntear";
+import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
 
 
 
@@ -42,12 +43,7 @@ export default async function EventDetails({params}:{params:Promise<{id:string}>
           {/* Event Banner */}
           <div className="relative h-60">
 
-            <Image
-              src={data.image}
-              alt="Event cover"
-              fill
-              className="object-cover"
-            />
+            <DefaultImageEventsDetails data={data}/>
 
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent" />

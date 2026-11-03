@@ -1,3 +1,4 @@
+
 import { IEventType } from "@/Type/EventsType";
 import {
   CalendarDays,
@@ -7,26 +8,17 @@ import {
   Trash,
   User,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import DefaultImageManage from "./DefaultImageManage";
 
 const ManageCard = ({ event } : {event: IEventType}) => {
-
-  console.log(event);
 
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg transition-colors">
       {/* Thumbnail */}
       <div className="relative aspect-video w-full">
         {/* Plain img so any image URL works without next/image domain config */}
-        <Image
-          src={event.image}
-          alt={event.eventName}
-          width={120}
-          height={120}
-          loading="lazy"
-          className="h-full w-full object-cover"
-        />
+        <DefaultImageManage event={event}/>
 
         {/* Status badge */}
         <span className="absolute left-3 top-3 inline-flex items-center border-2 border-blue-500 gap-1.5 rounded-full bg-transparent px-2.5 py-1 text-xs font-bold text-brand shadow-sm">
@@ -43,12 +35,12 @@ const ManageCard = ({ event } : {event: IEventType}) => {
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="text-xl font-extrabold tracking-tight text-glass-success">
+        <h3 className="text-xl font-extrabold tracking-tight text-brand">
           {event.eventName}
         </h3>
 
         <div className="mt-3 flex items-center gap-2 text-sm font-medium text-foreground">
-          <MapPin className="h-4 w-4 shrink-0 text-glass-success" />
+          <MapPin className="h-4 w-4 shrink-0 text-brand" />
           <span>{event.location}</span>
         </div>
 
@@ -58,7 +50,7 @@ const ManageCard = ({ event } : {event: IEventType}) => {
 
         {/* Organizer */}
         <div className="mt-4 flex items-center gap-2 border-t border-border pt-3 text-sm text-muted-foreground">
-          <User className="h-4 w-4 shrink-0 text-glass-success" />
+          <User className="h-4 w-4 shrink-0 text-brand" />
           <span>{event.userName}</span>
         </div>
 

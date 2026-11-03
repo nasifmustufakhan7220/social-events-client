@@ -3,9 +3,9 @@
 import { Input } from "@/components/ui/input";
 import { IEventType } from "@/Type/EventsType";
 import { CalendarDays, MapPin, Search, Tag, User } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import DefaultImage from "./DefaultImage";
 
 const categories = [
   { name: "All", href: "#all" },
@@ -54,7 +54,9 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
 
     const filteredEvents = ev.eventName.trim().toLowerCase().includes(E.trim().toLowerCase());
     return filteredEvents;
-  })
+  });
+
+
   
 
   return (
@@ -97,16 +99,8 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
             className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg transition-colors"
           >
             <div className="relative aspect-video w-full overflow-hidden">
-              <Image
-                src={event.image}
-                alt={event.eventName}
-                fill
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                loading="lazy"
-                className="object-cover"
-              />
-
-              <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-medium text-card-foreground">
+              <DefaultImage event={event}/>
+              <div className={`absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-medium ${event.eventType === "Winter Relief" ? "text-brand" : event.eventType === "Health Camp" ? "text-nasif" : event.eventType === "Education" ? "text-brand" : event.eventType === "Food Drive" ? "text-amber-700" : event.eventType === "Plantation" ? "text-glass-success" : event.eventType === "Cleanup" ? "text-muted-foreground" : event.eventType === "Donation" && "text-brand" }`}>
                 <Tag size={12} className="text-brand" />
                 {event.eventType}
               </div>
@@ -137,12 +131,14 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
               </div>
 
               <div className="mt-auto flex gap-2 pt-4">
+                <Link className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-lg bg-secondary text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/70" href={`/up-comming/${event._id}`}>
                 <button
                   type="button"
-                  className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-lg bg-secondary text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/70"
+                  
                 >
-                  <Link href={`/up-comming/${event._id}`}>View</Link>
+                  View
                 </button>
+                  </Link>
               </div>
             </div>
           </article>
