@@ -10,6 +10,7 @@ const ManageGrid = async () => {
     headers: await headers(),
   });
   const email = session?.user?.email;
+  if(!email) return;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}manage-event/${email}`,
   );

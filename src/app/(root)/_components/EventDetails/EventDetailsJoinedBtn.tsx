@@ -14,6 +14,8 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  if(!session?.user) return;
+
   const handelJoined = async () => {
     setLoading(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}joined-users`, {
