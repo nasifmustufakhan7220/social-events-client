@@ -16,12 +16,16 @@ import EventDetailsJoinedBtn from "./EventDetailsJoinedBtn";
 import EventDetailsVoluntearCount from "./EventDetailsVoluntearCount";
 import EventDetailsVoluntear from "./EventDetailsVoluntear";
 import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
+import { notFound } from "next/navigation";
 
 
 
 export default async function EventDetails({params}:{params:Promise<{id:string}>}) {
     const {id} = await params;
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`);
+    if(!res.ok){
+      notFound();
+    }
     const data: IEventType = await res.json();
   return (
     <main className="min-h-screen bg-background px-4 py-6">

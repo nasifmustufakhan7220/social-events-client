@@ -5,7 +5,7 @@ import { toast } from "@/components/ui/toast";
 import { EventContextApi, IVluntearType } from "@/contextApi/EventContextApi";
 import { IEventType } from "@/Type/EventsType";
 import { Handshake } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 
 const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
@@ -42,6 +42,8 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
       }),
     });
 
+    if(!res.ok) notFound();
+
     const events = await res.json();
     if (events.acknowledged) {
       toast.add({
@@ -72,6 +74,9 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
         method: "DELETE",
       },
     );
+    if(!res.ok){
+      notFound();
+    }
     const deleteUser = await res.json();
     if (deleteUser.deletedCount > 0) {
       router.refresh();

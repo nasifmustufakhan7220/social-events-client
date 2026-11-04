@@ -3,6 +3,7 @@ import { EventContextApi } from "@/contextApi/EventContextApi";
 import Image from "next/image";
 import {  useContext, useEffect } from "react";
 import { IEventType } from "@/Type/EventsType";
+import { notFound } from "next/navigation";
 
 
 const EventDetailsVoluntear = ({eventId}: {eventId:IEventType }) => {
@@ -10,7 +11,13 @@ const EventDetailsVoluntear = ({eventId}: {eventId:IEventType }) => {
 
   useEffect(()=>{
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${eventId._id}`)
-    .then((res)=> res.json())
+    .then((res)=> {
+      if(!res.ok){
+        return notFound();
+      }  
+      return res.json();
+    
+    })
     .then((data)=> setJoined(data))
   },[eventId,setJoined])
 

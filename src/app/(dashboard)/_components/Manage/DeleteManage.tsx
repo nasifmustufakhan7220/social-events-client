@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 const DeleteManage = ({ event }: { event: IEventType }) => {
     const [open, setOpen] = useState(false);
@@ -23,7 +23,9 @@ const DeleteManage = ({ event }: { event: IEventType }) => {
         setOpen(true);
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}manage-delete/${event._id}`,{
             method:'DELETE',
-        })
+        });
+
+        if(!res.ok) notFound();
         const data = await res.json();
         if(data.deletedCount > 0){
             setOpen(false);

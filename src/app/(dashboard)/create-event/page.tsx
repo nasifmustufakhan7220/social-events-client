@@ -17,6 +17,7 @@ import { useSession } from "@/app/lib/auth-client";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { Spinner } from "@/components/ui/spinner";
+import { notFound } from "next/navigation";
 
 const quickPresets = [
   "Winter Clothes",
@@ -78,6 +79,8 @@ const CreateEventPage = () => {
         userImage: session?.user?.image
       }),
     });
+
+    if(!res.json) notFound()
 
     const data = await res.json();
     if (data.acknowledged) {

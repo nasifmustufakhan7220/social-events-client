@@ -4,6 +4,7 @@ import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import DefaultJoinedImage from "./DefaultJoinedImage";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export interface IJoinedEvents {
   _id: string;
@@ -36,6 +37,7 @@ const JoinedEventsGrid = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}joined-users/${email}`,
   );
+  if(!res.ok) notFound();
   const Joinedevents:IJoinedEvents[] = await res.json();
   return (
     <div>

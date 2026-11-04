@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 const eventTypes = [
   "Donation",
   "Cleanup",
@@ -80,6 +80,7 @@ const EditMange = ({ event }: { event: IEventType }) => {
         body: JSON.stringify({...updateEvent, userEmail:event.userEmail, userName: event.userName}),
       },
     );
+    if(!res.ok) notFound()
 
     const data = await res.json();
     if(data.matchedCount > 0){
