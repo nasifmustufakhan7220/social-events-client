@@ -17,11 +17,18 @@ import EventDetailsVoluntearCount from "./EventDetailsVoluntearCount";
 import EventDetailsVoluntear from "./EventDetailsVoluntear";
 import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
 import { notFound } from "next/navigation";
+import { auth } from "@/app/lib/auth";
+import { headers } from "next/headers";
 
 
 
 export default async function EventDetails({params}:{params:Promise<{id:string}>}) {
     const {id} = await params;
+    const jwtToken = await auth.api.getToken({
+      headers: await headers()
+    });
+
+    console.log(jwtToken?.token);
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`);
     if(!res.ok){
       notFound();
