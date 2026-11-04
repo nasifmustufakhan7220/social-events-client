@@ -24,18 +24,23 @@ const JoinedEventsGrid = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
   const email = session?.user?.email;
-  if(!email){
-    return;
-  }
-
   if (!email) {
     return <ManageEmptyState />;
   }
 
+  const JwtToken = await auth.api.getToken({
+    headers: await headers()
+  });
+  const token = JwtToken?.token;
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}joined-users/${email}`,
+    {
+      headers:{
+        authorization: `Bearer ${token}`
+      }
+    }
   );
   if(!res.ok) notFound();
   const Joinedevents:IJoinedEvents[] = await res.json();

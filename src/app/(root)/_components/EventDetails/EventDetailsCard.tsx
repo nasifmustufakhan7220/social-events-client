@@ -105,7 +105,7 @@ export default async function EventDetails({params}:{params:Promise<{id:string}>
                 {/* Joined Button */}
 
                 
-               <EventDetailsJoinedBtn data={data} />
+               <EventDetailsJoinedBtn event={data} />
 
               </div>
             </div>

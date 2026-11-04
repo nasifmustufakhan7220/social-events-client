@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "@/app/lib/auth-client";
+import { authClient, useSession } from "@/app/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { EventContextApi, IVluntearType } from "@/contextApi/EventContextApi";
@@ -8,31 +8,42 @@ import { Handshake } from "lucide-react";
 import { notFound, useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 
-const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
+const EventDetailsJoinedBtn = ({ event }: { event: IEventType }) => {
   const { data: session } = useSession();
-  const { joined, setJoined} = useContext(EventContextApi);
+  const { joined, setJoined } = useContext(EventContextApi);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  if(!session?.user) return;
+  if (!session?.user) return;
 
   const handelJoined = async () => {
+    const { data, error } = await authClient.token();
+    if (error) {
+      toast.add({ title: error.message, type: "error" });
+      return;
+    }
+    const token = data?.token;
+    if (!token) {
+      toast.add({ title: "Not authenticated", type: "error" });
+      return;
+    }
     setLoading(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}joined-users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         userEmail: session?.user?.email,
         userImage: session?.user?.image,
         userName: session?.user?.name,
-        eventID: data._id,
-        eventName: data.eventName,
-        eventImage: data.image,
-        eventLocation: data.location,
-        eventTyepe: data.eventType,
-        eventDescription: data.description,
+        eventID: event._id,
+        eventName: event.eventName,
+        eventImage: event.image,
+        eventLocation: event.location,
+        eventTyepe: event.eventType,
+        eventDescription: event.description,
         eventWeek: new Date().toLocaleDateString("en-US", {
           weekday: "long",
           day: "numeric",
@@ -42,7 +53,7 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
       }),
     });
 
-    if(!res.ok) notFound();
+    if (!res.ok) notFound();
 
     const events = await res.json();
     if (events.acknowledged) {
@@ -52,7 +63,7 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
       });
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${data._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${event._id}`,
       );
       const joinedEvent = await res.json();
       setJoined(joinedEvent);
@@ -61,7 +72,7 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
   };
 
   const isUserJoined = joined.some(
-    (j) => j.eventID === data._id && j.userEmail === session?.user.email,
+    (j) => j.eventID === event._id && j.userEmail === session?.user.email,
   );
 
   const handeldelete = async (j: IVluntearType[]) => {
@@ -74,7 +85,7 @@ const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
         method: "DELETE",
       },
     );
-    if(!res.ok){
+    if (!res.ok) {
       notFound();
     }
     const deleteUser = await res.json();
