@@ -25,6 +25,9 @@ const JoinedEventsGrid = async () => {
   });
 
   const email = session?.user?.email;
+  if(!email){
+    return;
+  }
 
   if (!email) {
     return <ManageEmptyState />;
@@ -34,7 +37,6 @@ const JoinedEventsGrid = async () => {
     `${process.env.NEXT_PUBLIC_BASE_URL}joined-users/${email}`,
   );
   const Joinedevents:IJoinedEvents[] = await res.json();
-  console.log(Joinedevents);
   return (
     <div>
       <div className="mx-auto w-full max-w-5xl px-4">
