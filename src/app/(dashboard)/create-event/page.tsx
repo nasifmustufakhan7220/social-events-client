@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "@/app/lib/auth-client";
+import { authClient, useSession } from "@/app/lib/auth-client";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { Spinner } from "@/components/ui/spinner";
@@ -26,7 +26,15 @@ const quickPresets = [
   "Tree Plantation",
 ];
 
-const eventTypes = ["Donation", "Cleanup", "Plantation", "Winter Relief", "Food Drive", "Health Camp", "Education"];
+const eventTypes = [
+  "Donation",
+  "Cleanup",
+  "Plantation",
+  "Winter Relief",
+  "Food Drive",
+  "Health Camp",
+  "Education",
+];
 
 const getTodayLoacl = () => {
   const now = new Date();
@@ -40,14 +48,24 @@ const CreateEventPage = () => {
   const { data: session } = useSession();
   const [d, setD] = useState("");
   const [submit, setSubmit] = useState(false);
-  const [i, setI] = useState("")
+  const [i, setI] = useState("");
 
   const userEmail = session?.user?.email;
 
   const handelONSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
+    
+    const { data, error } = await authClient.token();
+    if (error) {
+      toast.add({ title: error.message, type: "error" });
+      return;
+    }
+    const token = data?.token;
+    if (!token) {
+      toast.add({ title: "Not authenticated", type: "error" });
+      return;
+    }
     const createEventData = Object.fromEntries(formData.entries());
 
     const today = getTodayLoacl();
@@ -58,32 +76,32 @@ const CreateEventPage = () => {
       });
     }
 
-    if(!i.toLowerCase().startsWith('https://')){
-       return toast.add({
+    if (!i.toLowerCase().startsWith("https://")) {
+      return toast.add({
         title: "Provide valid image URL start with https://",
-        type: "error"
+        type: "error",
       });
-     
     }
-    
+
     setSubmit(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}create-event`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...createEventData,
         userEmail: userEmail,
         userName: session?.user?.name,
-        userImage: session?.user?.image
+        userImage: session?.user?.image,
       }),
     });
 
-    if(!res.json) notFound()
+    if (!res.json) notFound();
 
-    const data = await res.json();
-    if (data.acknowledged) {
+    const result = await res.json();
+    if (result.acknowledged) {
       toast.add({
         title: "Event created successfully",
         type: "success",
@@ -227,7 +245,7 @@ const CreateEventPage = () => {
                 id="event-thumbnail"
                 name="image"
                 value={i}
-                onChange={(e)=>setI(e.target.value)}
+                onChange={(e) => setI(e.target.value)}
                 placeholder="https://images.unsplash.com/photo-…"
                 className="h-10 rounded-lg bg-background pl-9"
               />
