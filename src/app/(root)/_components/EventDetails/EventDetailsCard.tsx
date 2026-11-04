@@ -16,7 +16,6 @@ import EventDetailsJoinedBtn from "./EventDetailsJoinedBtn";
 import EventDetailsVoluntearCount from "./EventDetailsVoluntearCount";
 import EventDetailsVoluntear from "./EventDetailsVoluntear";
 import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
-import { notFound } from "next/navigation";
 import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 
@@ -28,11 +27,13 @@ export default async function EventDetails({params}:{params:Promise<{id:string}>
       headers: await headers()
     });
 
-    console.log(jwtToken?.token);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`);
-    if(!res.ok){
-      notFound();
-    }
+    const token = jwtToken?.token;
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`,{
+      headers:{
+        authorization: `Bearer ${token}`
+      }
+    });
+
     const data: IEventType = await res.json();
   return (
     <main className="min-h-screen bg-background px-4 py-6">
