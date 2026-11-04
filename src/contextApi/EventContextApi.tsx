@@ -1,52 +1,38 @@
 "use client"
-import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
 
-export type IJoinedButton = {
-    email: string;
-    image: string;
-    name: string;
+
+export interface IVluntearType {
+  _id: string;
+  eventName: string;
+  eventType: string;
+  date: string;
+  location: string;
+  image: string;
+  description: string;
+  userEmail:string;
+  userName: string;
+  userImage: string;
+  eventID:string
 }
 
 interface IContextType{
-    joined: IJoinedButton[];
-    setJoined: Dispatch<SetStateAction<IJoinedButton[]>>
-    isLoading: boolean;
-    setIsLoading: Dispatch<SetStateAction<boolean>>
+    joined: IVluntearType[];
+    setJoined: Dispatch<SetStateAction<IVluntearType[]>>
 }
 
 export const EventContextApi = createContext<IContextType>({
     joined: [],
     setJoined: ()=>{},
-    isLoading: true,
-    setIsLoading: ()=>{}
 });
 
 const EventContextApiProvider = ({children}: {children: ReactNode}) => {
-    const [joined, setJoined] = useState<IJoinedButton[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [joined, setJoined] = useState<IVluntearType[]>([]);
 
-    useEffect(()=>{
-        const getVluntear = localStorage.getItem("voluntear");
-
-        if(getVluntear){
-            const perseVoluntear = JSON.parse(getVluntear);
-            setJoined(perseVoluntear);
-        }
-
-        setIsLoading(false);
-    },[]);
-
-    useEffect(()=>{
-        if(isLoading === false){
-            localStorage.setItem("voluntear", JSON.stringify(joined));
-        }
-    },[joined, isLoading]);
 
     const obj={
         joined,
         setJoined,
-        isLoading,
-        setIsLoading
     }
     return <EventContextApi.Provider value={obj}>{children}</EventContextApi.Provider>
 };

@@ -195,7 +195,7 @@ export default async function EventDetails({params}:{params:Promise<{id:string}>
 
                   <div className="space-y-2">
 
-                    <EventDetailsVoluntear/>
+                    <EventDetailsVoluntear eventId={data}/>
                   </div>
                 </div>
 

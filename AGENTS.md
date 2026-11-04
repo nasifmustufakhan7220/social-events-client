@@ -24,13 +24,14 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 
 - `npm run dev` — dev server (Turbopack)
 - `npm run build` / `npm start` — production build/serve
-- `npm run lint` — flat-config ESLint (`eslint.config.mjs`)
-- No test or typecheck scripts exist. Typecheck with `npx tsc --noEmit`. Verify with `lint` + `tsc --noEmit` + `build`.
+- `npm run lint` — flat-config ESLint (`eslint.config.mjs`). **Baseline already fails**: 4 pre-existing `react-hooks/set-state-in-effect` errors (`EventDetailsJoinedBtn.tsx`, `ui/carousel.tsx`, `EventContextApi.tsx`, `hooks/use-mobile.ts`) + 1 unused-var warning. Don't fix them unless asked; just don't add new ones.
+- No test or typecheck scripts exist. Typecheck with `npx tsc --noEmit` (passes clean), then `npm run build` (passes clean). Use those two as verification; lint can't go green.
 
 ## Framework quirks (Next.js 16.4.3)
 
 - `cacheComponents: true` and `partialPrefetching: true` are set in `next.config.ts`. With cache components, route segment configs (`export const dynamic`, `revalidate`, `fetchCache`) are **errors** — use `use cache` / `cacheLife` instead. Data fetching must be cache-friendly (see `node_modules/next/dist/docs/01-app/02-guides/migrating-to-cache-components.md`).
 - Layouts/pages use the global `LayoutProps<"/route">` / `PageProps` helpers (no import needed), e.g. `function RootLayout({ children }: LayoutProps<"/">)`.
+- Route `params`/`searchParams` are Promises — `const { id } = await params` (see `up-comming/[id]/page.tsx`).
 - The bundled docs at `node_modules/next/dist/docs/` are version-matched — prefer them over training-data knowledge.
 
 ## Auth (better-auth + MongoDB)
@@ -38,7 +39,12 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 - Server config: `src/app/lib/auth.ts` — note it's under **`src/app/lib/`, not `src/lib/`**. MongoDB adapter, email+password **and Google social** enabled, db name hardcoded to `socialEvenets` (sic — it's a real database name, don't "fix" the typo without asking).
 - Route handler: `src/app/api/auth/[...all]/route.ts` (`toNextJsHandler(auth)`).
 - Client: `src/app/lib/auth-client.ts` exports two things: `authClient` (with `baseURL: process.env.BETTER_AUTH_URL`) and `signIn/signUp/signOut/useSession` from a **second** `createAuthClient()` without `baseURL`. All consumers (sign-in, sign-up, `Navbar`) import from the second one; `authClient` is unused. Don't "consolidate" them — `BETTER_AUTH_URL` has no `NEXT_PUBLIC_` prefix, so it's `undefined` in browser bundles; the bare client falls back to same-origin.
-- Requires `.env` (gitignored): `MONGODB_CLIENT_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, plus `BETTER_AUTH_GOOGLE_CLIENT_ID` / `BETTER_AUTH_GOOGLE_CLIENT_SECRET`. Fresh clones must create it — code reads env with `as string` casts, so missing vars fail at runtime, not typecheck.
+- Requires `.env` (gitignored): `MONGODB_CLIENT_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `BETTER_AUTH_GOOGLE_CLIENT_ID` / `BETTER_AUTH_GOOGLE_CLIENT_SECRET`, plus `NEXT_PUBLIC_BASE_URL` (see below). Fresh clones must create it — code reads env with `as string` casts, so missing vars fail at runtime, not typecheck.
+
+## Backend API (separate repo)
+
+- All event data comes from a sibling Express repo at `../social-events-server` (`node index.js`, port **8000**, same `socialEvenets` MongoDB db). It is not part of this repo — start it separately or every data page (`/up-comming`, details, manage-event, create-event) fails at runtime.
+- Pages fetch as `${process.env.NEXT_PUBLIC_BASE_URL}<path>` with **no slash inserted**, so the value must end with `/` (e.g. `http://localhost:8000/`). The URL is baked in at build time (`NEXT_PUBLIC_` prefix).
 
 ## UI stack (differs from typical shadcn setups)
 
@@ -53,3 +59,4 @@ Next.js 16 App Router client app (npm, `package-lock.json` — don't introduce a
 
 - Path alias `@/*` → `src/*`. App code lives under `src/` (the README still says `app/` — it's stale create-next-app boilerplate).
 - Shared (non-ui) components go in `src/components/<PascalCase>/`; shadcn primitives in `src/components/ui/`; hooks in `src/hooks/`.
+- "Joined volunteer" state lives in `src/contextApi/EventContextApi.tsx` and persists to `localStorage` keys `voluntear` / `loading` (sic) — it is not stored on the server.

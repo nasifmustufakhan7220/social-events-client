@@ -1,12 +1,18 @@
 "use client";
-
-import { EventContextApi, IJoinedButton } from "@/contextApi/EventContextApi";
+import { EventContextApi } from "@/contextApi/EventContextApi";
 import Image from "next/image";
-import { useContext } from "react";
+import {  useContext, useEffect } from "react";
+import { IEventType } from "@/Type/EventsType";
 
-const EventDetailsVoluntear = () => {
-  const { joined } = useContext(EventContextApi);
-  const voluntears: IJoinedButton[] = joined;
+
+const EventDetailsVoluntear = ({eventId}: {eventId:IEventType }) => {
+  const {joined, setJoined} = useContext(EventContextApi)
+
+  useEffect(()=>{
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${eventId._id}`)
+    .then((res)=> res.json())
+    .then((data)=> setJoined(data))
+  },[eventId,setJoined])
 
   return (
     <div>
@@ -15,25 +21,22 @@ const EventDetailsVoluntear = () => {
       </h3>
 
       <div className="grid grid-cols-1 gap-3">
-        {voluntears.slice(0,5).map((volunteer, index) => (
-          <div
-            key={`${volunteer.email}${index}`}
-            className="flex items-center gap-2"
-          >
+        {joined.map((volunteer, index) => (
+          <div key={`${volunteer._id}${index}`} className="flex items-center gap-2">
             <span className="text-[10px] text-card-foreground">
               <Image
                 className="flex size-8 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground"
-                src={volunteer.image}
+                src={volunteer.userImage}
                 width={20}
                 height={20}
-                alt={volunteer.email}
+                alt={volunteer.userName}
               />
             </span>
 
             <div
               className={`flex size-5 items-center justify-center rounded-full text-[9px] font-bold text-slate-700`}
             >
-              {volunteer.name}
+              {volunteer.userName}
             </div>
           </div>
         ))}
