@@ -47,8 +47,22 @@ const UpCommingButtons = ({ events }: { events: IEventType[] }) => {
   };
 
   const e = filteredDatas();
+  console.log(e);
 
+  const getTodayLoacl = ()=>{
+    const now = new Date();
+    const month = String(now.getMonth()+1).padStart(2, "0");
+    const year = now.getFullYear();
+    const day = String(now.getDay()+1).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+    
+  }
+  const today = getTodayLoacl();
   const newE = e.filter((ev) => {
+    if(ev.date < today){
+      return false;
+    }
+
     if (E.trim().length === 0) {
       return e;
     }
