@@ -16,23 +16,13 @@ import EventDetailsJoinedBtn from "./EventDetailsJoinedBtn";
 import EventDetailsVoluntearCount from "./EventDetailsVoluntearCount";
 import EventDetailsVoluntear from "./EventDetailsVoluntear";
 import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
-import { auth } from "@/app/lib/auth";
-import { headers } from "next/headers";
+
 
 
 
 export default async function EventDetails({params}:{params:Promise<{id:string}>}) {
     const {id} = await params;
-    const jwtToken = await auth.api.getToken({
-      headers: await headers()
-    });
-
-    const token = jwtToken?.token;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`,{
-      headers:{
-        authorization: `Bearer ${token}`
-      }
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`);
 
     const data: IEventType = await res.json();
   return (
