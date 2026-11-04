@@ -15,9 +15,12 @@ import {
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { notFound, useRouter } from "next/navigation";
+// import { EventContextApi } from "@/contextApi/EventContextApi";
 
 const DeleteManage = ({ event }: { event: IEventType }) => {
+    console.log(event);
     const [open, setOpen] = useState(false);
+    // const {setAvaiable} = useContext(EventContextApi)
     const router = useRouter();
     const handelDelete = async()=>{
         setOpen(true);

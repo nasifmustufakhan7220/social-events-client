@@ -10,7 +10,7 @@ import { useContext, useState } from "react";
 
 const EventDetailsJoinedBtn = ({ data }: { data: IEventType }) => {
   const { data: session } = useSession();
-  const { joined, setJoined } = useContext(EventContextApi);
+  const { joined, setJoined} = useContext(EventContextApi);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
