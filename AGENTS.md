@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Project: social-events-client
 
-Next.js 16 App Router client app. npm + `package-lock.json` only — don't introduce another package manager. App code lives under `src/` (the README's `app/` references are stale create-next-app boilerplate). Routes live in three groups under `src/app/`: `(root)` (`/`, `/up-comming`, `/up-comming/[id]`), `(auth)` (`sign-in`, `sign-up`), `(dashboard)` (`create-event`, `joined-event`, `manage-event`). Root `src/app/page.tsx` is an empty placeholder. `Navbar` and `Toaster` are global in `src/app/layout.tsx`. Auth is wired to better-auth.
+Next.js 16.4.3 App Router client app. npm + `package-lock.json` only — don't introduce another package manager. App code lives under `src/` (the README's `app/` references are stale create-next-app boilerplate). Routes live in three groups under `src/app/`: `(root)` (`/`, `/up-comming`, `/up-comming/[id]`), `(auth)` (`sign-in`, `sign-up`), `(dashboard)` (`create-event`, `joined-event`, `manage-event`). `Navbar` and `Toaster` are global in `src/app/layout.tsx`. Auth is wired to better-auth.
 
 Rule for every request:
 
