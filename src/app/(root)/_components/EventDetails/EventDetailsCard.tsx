@@ -16,6 +16,7 @@ import EventDetailsJoinedBtn from "./EventDetailsJoinedBtn";
 import EventDetailsVoluntearCount from "./EventDetailsVoluntearCount";
 import EventDetailsVoluntear from "./EventDetailsVoluntear";
 import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
+import { notFound } from "next/navigation";
 
 
 
@@ -23,6 +24,7 @@ import DefaultImageEventsDetails from "./DefaultImageEventsDetails";
 export default async function EventDetails({params}:{params:Promise<{id:string}>}) {
     const {id} = await params;
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}up-comming/${id}`);
+    if(!res.ok) notFound()
 
     const data: IEventType = await res.json();
   return (
