@@ -67,7 +67,7 @@ const EventDetailsVoluntear = ({eventId}: {eventId:IEventType }) => {
             </span>
 
             <div
-              className={`flex size-5 items-center justify-center rounded-full text-[9px] font-bold text-slate-700`}
+              className={`flex size items-center justify-center gap-2 rounded-full text-[9px] font-bold text-muted-foreground`}
             >
               {volunteer.userName}
             </div>

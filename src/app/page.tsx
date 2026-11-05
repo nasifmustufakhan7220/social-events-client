@@ -1,5 +1,7 @@
 import ActionTaken from "@/components/ActionTaken";
 import Banner from "@/components/Banner";
+import Subscribe from "@/components/Subscribe";
+import UpcommingHomeEvents from "@/components/UpcommingHomeEvents";
 
 
 export default function Home() {
@@ -7,7 +9,10 @@ export default function Home() {
     <div>
 
       <Banner/>
+
+      <UpcommingHomeEvents/>
       <ActionTaken/>
+      <Subscribe/>
     </div>
   );
 }

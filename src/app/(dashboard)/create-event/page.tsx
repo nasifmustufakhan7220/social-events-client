@@ -175,7 +175,7 @@ const CreateEventPage = () => {
                   className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-input bg-background pl-9 pr-3 text-base text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm dark:bg-input/30 dark:scheme-dark"
                 >
                   {eventTypes.map((type) => (
-                    <option key={type} value={type}>
+                    <option key={type} value={type} className="bg-card text-card-foreground">
                       {type}
                     </option>
                   ))}

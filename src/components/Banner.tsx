@@ -21,8 +21,8 @@ const Banner = () => {
 
           {/* Heading */}
           <h1 className="mx-auto mt-8 max-w-4xl text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            Gather for Good.{" "}
-            <span className="text-brand">Transform Your Neighborhood.</span>
+            Empowering Communities.{" "}
+            <span className="text-brand">Sustaining Growth.</span>
           </h1>
 
           {/* Paragraph */}

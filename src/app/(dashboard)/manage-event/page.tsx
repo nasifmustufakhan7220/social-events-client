@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import ManageGrid from "../_components/Manage/ManageGrid";
 import Link from "next/link";
 import { PlusCircle, Settings } from "lucide-react";
+import JoinedEventsSkeleton from "../_components/joined/JoinedEventsSkeleton";
 
 const ManageEventPage = () => {
   return (
@@ -33,7 +34,7 @@ const ManageEventPage = () => {
           Create New Event
         </Link>
       </div>
-      <Suspense fallback={<p>Loading....</p>}>
+      <Suspense fallback={<JoinedEventsSkeleton/>}>
         <ManageGrid />
       </Suspense>
     </div>

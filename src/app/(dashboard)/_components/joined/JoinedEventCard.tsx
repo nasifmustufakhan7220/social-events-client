@@ -38,7 +38,7 @@ const JoinedEventCard = ({joinedEvents}:{joinedEvents:IJoinedEvents[]}) => {
 
                   {/* Date badge */}
                   <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-lg bg-black/70 px-2.5 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
-                    <CalendarDays className="h-3.5 w-3.5 text-glass-success" />
+                    <CalendarDays className="h-3.5 w-3.5 text-brand" />
                     {event.eventWeek}
                   </span>
                 </div>

@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CheckCircle, MapPin, PlusCircle, Settings } from "lucide-react";
+import { CheckCircle, PlusCircle, Settings } from "lucide-react";
+import { useSession } from "@/app/lib/auth-client";
+import ProfileSidebarSkeleton from "./DashboardProfileSkeleton";
 
 const categories = [
     { href: "/create-event", label: "Create Event", icon: PlusCircle },
@@ -13,13 +15,16 @@ const categories = [
 
 const DashboardSidebar = () => {
     const pathName = usePathname();
+    const {data:session, isPending} = useSession();
+
+    if(isPending) return <ProfileSidebarSkeleton/>
 
     return (
         <aside className="space-y-6">
-            {/* Profile card (dummy data) */}
+
             <div className="overflow-hidden rounded-2xl bg-card shadow-md">
-                {/* Cover */}
-                <div className="relative h-24 bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#4c1d95]">
+
+                <div className="relative h-24 bg-linear-to-br from-[#1e1b4b] via-[#312e81] to-[#4c1d95]">
                     <span className="absolute left-6 top-5 h-3.5 w-3.5 rounded-full bg-amber-400/80" />
                     <span className="absolute right-12 top-8 h-4 w-4 rounded-full bg-emerald-400/70" />
                     <span className="absolute left-1/2 top-4 h-2.5 w-2.5 rounded-full bg-pink-400/70" />
@@ -27,24 +32,19 @@ const DashboardSidebar = () => {
                     <span className="absolute right-8 bottom-3 h-2.5 w-2.5 rounded-full bg-white/60" />
                 </div>
 
-                {/* Avatar + details */}
+
                 <div className="flex flex-col items-center px-4 pb-5 text-center">
                     <Avatar className="-mt-10 size-20 border-4 border-white shadow-md after:hidden">
                         <AvatarImage
-                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop"
+                            src={session?.user?.image || "https://github.com/shadcn.png"}
                             alt="John Doe"
                         />
                         <AvatarFallback>JD</AvatarFallback>
                     </Avatar>
 
                     <h2 className="mt-3 text-lg font-bold text-card-foreground">
-                        John Doe
+                        {session?.user?.name}
                     </h2>
-
-                    <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4 text-red-500" />
-                        India
-                    </p>
 
                     {/* Followers / Following */}
                     <div className="mt-4 grid w-full grid-cols-2 divide-x divide-border">

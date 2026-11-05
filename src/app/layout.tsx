@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/app/(root)/_components/Shared/Navbar";
 import { Toaster } from "@/components/ui/toast";
 import EventContextApiProvider from "@/contextApi/EventContextApi";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Toaster />
           </ThemeProvider>
         </EventContextApiProvider>
+        <Footer/>
       </body>
     </html>
   );

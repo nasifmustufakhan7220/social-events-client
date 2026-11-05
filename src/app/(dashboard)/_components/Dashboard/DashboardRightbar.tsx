@@ -24,12 +24,12 @@ const DashboardRightbar = () => {
     return (
         <aside className="space-y-6">
             {/* Post your event card */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#111827] via-[#1e1b4b] to-[#312e81] p-6 text-center shadow-md">
+            <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-[#111827] via-[#1e1b4b] to-[#312e81] p-6 text-center shadow-md">
                 {/* decorative dots */}
-                <span className="absolute left-5 top-4 h-3 w-3 rounded-full bg-amber-400/60" />
-                <span className="absolute right-8 top-10 h-4 w-4 rounded-full bg-emerald-400/50" />
-                <span className="absolute bottom-8 left-10 h-2.5 w-2.5 rounded-full bg-pink-400/50" />
-                <span className="absolute right-14 bottom-4 h-2 w-2 rounded-full bg-sky-300/60" />
+                <span className="absolute left-5 top-4 h-3 w-3 rounded-full bg-brand" />
+                <span className="absolute right-8 top-10 h-4 w-4 rounded-full bg-brand" />
+                <span className="absolute bottom-8 left-10 h-2.5 w-2.5 rounded-full bg-brand" />
+                <span className="absolute right-14 bottom-4 h-2 w-2 rounded-full bg-brand" />
 
                 <div className="relative">
                     <h2 className="text-lg font-bold text-white">
@@ -41,7 +41,7 @@ const DashboardRightbar = () => {
                     </p>
                     <Link
                         href="/create-event"
-                        className="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-orange-400 to-rose-400 px-8 text-sm font-bold text-white shadow-md transition-opacity hover:opacity-90"
+                        className="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-brand px-8 text-sm font-bold text-white shadow-md transition-opacity hover:opacity-90"
                     >
                         Post It Now
                     </Link>
@@ -58,7 +58,7 @@ const DashboardRightbar = () => {
                     {exploreEvents.map((item) => (
                         <div
                             key={item.label}
-                            className={`relative flex min-h-28 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br p-4 text-white shadow-sm ${item.tileClass}`}
+                            className={`relative flex min-h-28 items-center justify-center overflow-hidden rounded-xl bg-linear-to-br p-4 text-white shadow-sm ${item.tileClass}`}
                         >
                             <item.icon className="pointer-events-none absolute -bottom-4 -right-4 h-24 w-24 text-white/20" />
 
