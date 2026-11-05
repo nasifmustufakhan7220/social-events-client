@@ -1,6 +1,7 @@
 "use client";
 import {
   CalendarDays,
+  CalendarHeart,
   CheckCircle,
   HelpingHand,
   LogIn,
@@ -87,25 +88,30 @@ const Navbar = () => {
                 />
                 <DropdownMenuContent className="w-64 rounded-2xl border border-border bg-popover p-2 text-popover-foreground shadow-xl">
                   <DropdownMenuGroup>
-                    <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      My Account
+                    <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b-2">
+                      {session?.user?.name}
+                      {session?.user?.email}
                     </DropdownMenuLabel>
 
                     <DropdownMenuItem
-                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:bg-foreground/10! focus:bg-foreground/10! ${
+                      className={`group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
                         pathName === "/create-event"
                           ? "bg-brand/10 text-brand"
                           : "text-muted-foreground"
                       }`}
                     >
-                      <PlusCircleIcon className="size-4" />
-                      <Link href="/create-event" className="flex-1">
+                      <PlusCircleIcon className="size-4 transition-colors group-hover:text-brand" />
+
+                      <Link
+                        href="/create-event"
+                        className="flex-1 transition-colors group-hover:text-brand"
+                      >
                         Create Event
                       </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
-                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:bg-foreground/10! focus:bg-foreground/10! ${
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
                         pathName === "/joined-event"
                           ? "bg-brand/10 text-brand"
                           : "text-muted-foreground"
@@ -118,7 +124,7 @@ const Navbar = () => {
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
-                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:bg-foreground/10! focus:bg-foreground/10! ${
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
                         pathName === "/manage-event"
                           ? "bg-brand/10 text-brand"
                           : "text-muted-foreground"
@@ -127,6 +133,19 @@ const Navbar = () => {
                       <Settings className="size-4" />
                       <Link href="/manage-event" className="flex-1">
                         Manage Events
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      className={`flex md:hidden cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
+                        pathName === "/up-comming"
+                          ? "bg-brand/10 text-brand"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      <CalendarHeart className="size-4" />
+                      <Link href="/up-comming" className="flex-1">
+                        Upcomming Events
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
