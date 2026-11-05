@@ -15,47 +15,65 @@ import {
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { notFound, useRouter } from "next/navigation";
+import { authClient } from "@/app/lib/auth-client";
 // import { EventContextApi } from "@/contextApi/EventContextApi";
 
 const DeleteManage = ({ event }: { event: IEventType }) => {
-    console.log(event);
-    const [open, setOpen] = useState(false);
-    // const {setAvaiable} = useContext(EventContextApi)
-    const router = useRouter();
-    const handelDelete = async()=>{
-        setOpen(true);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}manage-delete/${event._id}`,{
-            method:'DELETE',
-        });
-
-        if(!res.ok) notFound();
-        const data = await res.json();
-        if(data.deletedCount > 0){
-            setOpen(false);
-            router.refresh();
-            toast.add({
-                title: "Your event is delete successfully",
-                type: "success"
-            });
-        }else{
-            return toast.add({
-                title: "Your event is not delete successfully",
-                type: "error"
-            });
-        };
+  console.log(event);
+  const [open, setOpen] = useState(false);
+  // const {setAvaiable} = useContext(EventContextApi)
+  const router = useRouter();
+  const handelDelete = async () => {
+    setOpen(true);
+    const { data, error } = await authClient.token();
+    if (error) {
+      toast.add({ title: error.message, type: "error" });
+      return;
     }
+    const token = data?.token;
+    if (!token) {
+      toast.add({ title: "Not authenticated", type: "error" });
+      return;
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}manage-delete/${event._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!res.ok) notFound();
+    const result = await res.json();
+    if (result.deletedCount > 0) {
+      setOpen(false);
+      router.refresh();
+      toast.add({
+        title: "Your event is delete successfully",
+        type: "success",
+      });
+    } else {
+      return toast.add({
+        title: "Your event is not delete successfully",
+        type: "error",
+      });
+    }
+  };
   return (
     <div>
-      <div
-      
-        className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-glass-error/40 bg-glass-error/10 px-3 text-sm font-bold text-glass-error transition-colors hover:bg-glass-error/20"
-      >
-        
+      <div className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-glass-error/40 bg-glass-error/10 px-3 text-sm font-bold text-glass-error transition-colors hover:bg-glass-error/20">
         <AlertDialog open={open} onOpenChange={setOpen}>
-        
-          <AlertDialogTrigger className={`flex items-center gap-1 cursor-pointer`}
+          <AlertDialogTrigger
+            className={`flex items-center gap-1 cursor-pointer`}
             render={
-            <div><Trash className="h-4 w-4" />Delete</div>}
+              <div>
+                <Trash className="h-4 w-4" />
+                Delete
+              </div>
+            }
           />
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -67,7 +85,9 @@ const DeleteManage = ({ event }: { event: IEventType }) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handelDelete}>Continue</AlertDialogAction>
+              <AlertDialogAction onClick={handelDelete}>
+                Continue
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

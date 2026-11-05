@@ -11,8 +11,19 @@ const ManageGrid = async () => {
   });
   const email = session?.user?.email;
   if(!email) return;
+
+
+   const JwtToken = await auth.api.getToken({
+    headers: await headers()
+  });
+  const token = JwtToken?.token;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}manage-event/${email}`,
+    {
+       headers:{
+        authorization: `Bearer ${token}`
+      }
+    }
   );
   const manageEvents: IEventType[] = await res.json();
 

@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { notFound, useRouter } from "next/navigation";
+import { authClient } from "@/app/lib/auth-client";
 const eventTypes = [
   "Donation",
   "Cleanup",
@@ -53,6 +54,17 @@ const EditMange = ({ event }: { event: IEventType }) => {
   const handelOnSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
+    const { data, error } = await authClient.token();
+    if (error) {
+      toast.add({ title: error.message, type: "error" });
+      return;
+    }
+    const token = data?.token;
+    if (!token) {
+      toast.add({ title: "Not authenticated", type: "error" });
+      return;
+    }
     const updateEvent = Object.fromEntries(formData.entries());
     const today = getDate();
     if (d < today) {
@@ -74,24 +86,28 @@ const EditMange = ({ event }: { event: IEventType }) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}manage-event/${event._id}`,
       {
         method: "PATCH",
-        headers:{
-            "Content-Type": "application/json",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({...updateEvent, userEmail:event.userEmail, userName: event.userName}),
+        body: JSON.stringify({
+          ...updateEvent,
+          userEmail: event.userEmail,
+          userName: event.userName,
+        }),
       },
     );
-    if(!res.ok) notFound()
+    if (!res.ok) notFound();
 
-    const data = await res.json();
-    if(data.matchedCount > 0){
-        setOpen(false);
-        router.refresh();
-        toast.add({
-            title: "Your event successfully updated",
-            type: "success"
-
-        })
-    };
+    const result = await res.json();
+    if (result.matchedCount > 0) {
+      setOpen(false);
+      router.refresh();
+      toast.add({
+        title: "Your event successfully updated",
+        type: "success",
+      });
+    }
   };
   return (
     <div>
@@ -253,7 +269,7 @@ const EditMange = ({ event }: { event: IEventType }) => {
             </FieldGroup>
             <DialogFooter>
               <DialogClose render={<Button variant="outline">Cancel</Button>} />
-               <Button type="submit">Save changes</Button>
+              <Button type="submit">Save changes</Button>
             </DialogFooter>
           </form>
         </DialogContent>
