@@ -64,6 +64,11 @@ const EventDetailsJoinedBtn = ({ event }: { event: IEventType }) => {
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${event._id}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
       );
       const joinedEvent = await res.json();
       setJoined(joinedEvent);

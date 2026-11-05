@@ -4,22 +4,48 @@ import Image from "next/image";
 import {  useContext, useEffect } from "react";
 import { IEventType } from "@/Type/EventsType";
 import { notFound } from "next/navigation";
+import { authClient } from "@/app/lib/auth-client";
+import { toast } from "@/components/ui/toast";
 
 
 const EventDetailsVoluntear = ({eventId}: {eventId:IEventType }) => {
   const {joined, setJoined} = useContext(EventContextApi)
 
-  useEffect(()=>{
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${eventId._id}`)
-    .then((res)=> {
-      if(!res.ok){
-        return notFound();
-      }  
-      return res.json();
-    
-    })
-    .then((data)=> setJoined(data))
-  },[eventId,setJoined])
+  useEffect(() => {
+    const fetchJoinedEvents = async () => {
+      const { data, error } = await authClient.token();
+
+      if (error) {
+        toast.add({ title: error.message, type: "error" });
+        return;
+      }
+
+      const token = data?.token;
+
+      if (!token) {
+        toast.add({ title: "Not authenticated", type: "error" });
+        return;
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}joined-events/${eventId._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        notFound();
+      }
+
+      const result = await res.json();
+      setJoined(result);
+    };
+
+    fetchJoinedEvents();
+  }, [eventId._id, setJoined]);
 
   return (
     <div>
