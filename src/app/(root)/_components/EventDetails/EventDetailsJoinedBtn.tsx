@@ -5,14 +5,13 @@ import { toast } from "@/components/ui/toast";
 import { EventContextApi, IVluntearType } from "@/contextApi/EventContextApi";
 import { IEventType } from "@/Type/EventsType";
 import { Handshake } from "lucide-react";
-import { notFound, useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useContext, useState } from "react";
 
 const EventDetailsJoinedBtn = ({ event }: { event: IEventType }) => {
   const { data: session } = useSession();
   const { joined, setJoined } = useContext(EventContextApi);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   if (!session?.user) return;
 
@@ -84,10 +83,26 @@ const EventDetailsJoinedBtn = ({ event }: { event: IEventType }) => {
     const id = j.find(
       (i) => i.eventID === event._id && i.userEmail === session?.user?.email,
     );
+
+    const { data, error } = await authClient.token();
+    if (error) {
+      toast.add({ title: error.message, type: "error" });
+      return;
+    }
+    const token = data?.token;
+    if (!token) {
+      toast.add({ title: "Not authenticated", type: "error" });
+      return;
+    }
+
+    setLoading(true);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}joined-users/${id?._id}`,
       {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       },
     );
     if (!res.ok) {
@@ -95,12 +110,14 @@ const EventDetailsJoinedBtn = ({ event }: { event: IEventType }) => {
     }
     const deleteUser = await res.json();
     if (deleteUser.deletedCount > 0) {
-      router.refresh();
+      const updateJoined = joined.filter(j=> j._id !== id?._id)
+      setJoined(updateJoined)
       toast.add({
         title: "You are successfully leave from this event",
         type: "success",
       });
     }
+    setLoading(false);
   };
 
   return (
