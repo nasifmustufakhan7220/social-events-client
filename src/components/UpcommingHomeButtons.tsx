@@ -1,12 +1,11 @@
 "use client";
-
 import DefaultImage from "@/app/(root)/_components/upcomming/DefaultImage";
 import { IEventType } from "@/Type/EventsType";
 import { CalendarDays, MapPin, Tag, User } from "lucide-react";
 import Link from "next/link";
+import UpcommingHomeEmptyState from "./UpcommingHomeEmptyState";
 
-
-const UpcommingHomeButtons = ({events}:{events: IEventType[]}) => {
+const UpcommingHomeButtons = ({ events }: { events: IEventType[] }) => {
   const filteredDatas = () => {
     const ev = [...events].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
@@ -17,17 +16,16 @@ const UpcommingHomeButtons = ({events}:{events: IEventType[]}) => {
   const e = filteredDatas();
   console.log(e);
 
-  const getTodayLoacl = ()=>{
+  const getTodayLoacl = () => {
     const now = new Date();
-    const month = String(now.getMonth()+1).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
     const year = now.getFullYear();
-    const day = String(now.getDay()+1).padStart(2, "0");
+    const day = String(now.getDay() + 1).padStart(2, "0");
     return `${year}-${month}-${day}`;
-    
-  }
+  };
   const today = getTodayLoacl();
   const newE = e.filter((ev) => {
-    if(ev.date < today){
+    if (ev.date < today) {
       return false;
     }
     return true;
@@ -37,7 +35,12 @@ const UpcommingHomeButtons = ({events}:{events: IEventType[]}) => {
     <div>
       <div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-            {newE.map((event) => (
+          {newE.length === 0 ? (
+            <div className="col-span-full flex w-full justify-center">
+              <UpcommingHomeEmptyState />
+            </div>
+          ) : (
+            newE.slice(0, 6).map((event) => (
               <article
                 key={event._id}
                 className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg transition-colors"
@@ -86,8 +89,9 @@ const UpcommingHomeButtons = ({events}:{events: IEventType[]}) => {
                   </div>
                 </div>
               </article>
-            ))}
-          </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
