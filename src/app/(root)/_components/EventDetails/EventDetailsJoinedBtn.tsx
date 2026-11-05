@@ -82,7 +82,7 @@ const EventDetailsJoinedBtn = ({ event }: { event: IEventType }) => {
 
   const handeldelete = async (j: IVluntearType[]) => {
     const id = j.find(
-      (i) => i.eventID === data._id && i.userEmail === session?.user?.email,
+      (i) => i.eventID === event._id && i.userEmail === session?.user?.email,
     );
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}joined-users/${id?._id}`,
