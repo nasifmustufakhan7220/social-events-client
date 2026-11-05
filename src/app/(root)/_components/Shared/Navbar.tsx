@@ -93,6 +93,7 @@ const Navbar = () => {
                       {session?.user?.email}
                     </DropdownMenuLabel>
 
+                    <Link href="/create-event" className="flex-1 transition-colors group-hover:text-brand">
                     <DropdownMenuItem
                       className={`group flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
                         pathName === "/create-event"
@@ -102,14 +103,11 @@ const Navbar = () => {
                     >
                       <PlusCircleIcon className="size-4 transition-colors group-hover:text-brand" />
 
-                      <Link
-                        href="/create-event"
-                        className="flex-1 transition-colors group-hover:text-brand"
-                      >
                         Create Event
-                      </Link>
                     </DropdownMenuItem>
+                      </Link>
 
+                    <Link href="/joined-event" className="flex-1">
                     <DropdownMenuItem
                       className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
                         pathName === "/joined-event"
@@ -118,11 +116,11 @@ const Navbar = () => {
                       }`}
                     >
                       <CheckCircle className="size-4" />
-                      <Link href="/joined-event" className="flex-1">
                         Joined Events
-                      </Link>
                     </DropdownMenuItem>
+                      </Link>
 
+                    <Link href="/manage-event" className="flex-1">
                     <DropdownMenuItem
                       className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
                         pathName === "/manage-event"
@@ -131,23 +129,22 @@ const Navbar = () => {
                       }`}
                     >
                       <Settings className="size-4" />
-                      <Link href="/manage-event" className="flex-1">
                         Manage Events
-                      </Link>
                     </DropdownMenuItem>
+                      </Link>
 
-                    <DropdownMenuItem
-                      className={`flex md:hidden cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
-                        pathName === "/up-comming"
-                          ? "bg-brand/10 text-brand"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      <CalendarHeart className="size-4" />
-                      <Link href="/up-comming" className="flex-1">
+                    <Link href="/up-comming" className="flex-1">
+                      <DropdownMenuItem
+                        className={`flex md:hidden cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium outline-none transition-colors hover:text-brand! focus:text-brand! ${
+                          pathName === "/up-comming"
+                            ? "bg-brand/10 text-brand"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        <CalendarHeart className="size-4" />
                         Upcomming Events
-                      </Link>
-                    </DropdownMenuItem>
+                      </DropdownMenuItem>
+                    </Link>
                   </DropdownMenuGroup>
 
                   <DropdownMenuSeparator className="my-2" />
